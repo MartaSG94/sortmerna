@@ -44,4 +44,11 @@ For questions help, please contact:
 
 This user manual is for SortMeRNA version 3
 
+== Databases ==
+
+== Usage ==
+
+== Getting Help ==
+
+== Citation ==
 ∉
