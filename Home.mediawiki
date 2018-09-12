@@ -1,0 +1,19 @@
+<h1>SortMeRNA User Manual</h1>
+<p>
+SortMeRNA is a local sequence alignment tool for filtering, mapping and OTU-picking.
+The core algorithm is based on approximate seeds and allows for fast and sensitive analyses
+of NGS reads. The main application of SortMeRNA is filtering rRNA from metatranscriptomic data.
+Additional applications include OTU-picking and taxonomy assignation available through QIIME v1.9+ http://qiime.org.
+SortMeRNA takes as input a file of reads (fasta or fastq format) and one or multiple rRNA
+database file(s), and sorts apart aligned and rejected reads into two files specified by the user.
+SortMeRNA works with Illumina, 454, Ion Torrent and PacBio data, and can produce SAM and
+BLAST-like alignments.
+</p>
+
+For questions help, please contact:
+
+ 1. xxx
+ 2. yyy
+ 3. zzz
+
+This user manual is for SortMeRNA version 3
