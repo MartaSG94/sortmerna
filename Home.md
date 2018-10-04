@@ -1,6 +1,6 @@
-= SortMeRNA User Manual =
+# SortMeRNA User Manual
 
-== Contents ==
+## Contents
 
 # Introduction [[3]]
 # Installation 3
@@ -43,6 +43,10 @@ For questions help, please contact:
 # zzz
 
 This user manual is for SortMeRNA version 3
+
+Sortmerna architecture and objects diagram
+
+![smr diagram](https://github.com/biocore/sortmerna/blob/master/docs/sortmerna_1.svg "diagram")
 
 == Databases ==
 
