@@ -1,7 +1,4 @@
-
-(under construction)
-
-# Table of Contents
+# Contents
 * [Using GitHub release binaries](#using-github-release-binaries)
 
 
