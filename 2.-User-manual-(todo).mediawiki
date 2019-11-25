@@ -1,0 +1,47 @@
+November 2019, version 4.0.0
+
+== Introduction ==
+
+SortMeRNA is a local sequence alignment tool for filtering, mapping and OTU clustering. The core algorithm is based on approximate seeds and allows for fast and sensitive analyses of NGS reads. The main application of SortMeRNA is filtering rRNA from metatranscriptomic data. Additional applications include OTU-picking and taxonomy assignation available through QIIME v1.9+ (http://qiime.org). SortMeRNA takes as input one or two (paired) reads file(s) (fasta/fasta.gz/fastq/fastq.gz), and one or multiple rRNA database file(s), and sorts apart aligned and rejected reads into two files. SortMeRNA works with Illumina, 454, Ion Torrent and PacBio data, and can produce SAM and BLAST-like alignments.
+
+![architecture](https://github.com/biocore/sortmerna/blob/issue_136_paired_reads/docs/web/img/smr_1_arch.svg)  
+Figure 1. High view architecture
+
+== Databases ==
+{|
+| representative database          || %id || <nowiki>#</nowiki> seq (clustered) || origin  || <nowiki>#</nowiki> seq (original)
+|-
+| silva-bac-16s-id90    || 90  || 12798  || SILVA SSU Ref NR v.119 || 464618
+|-
+| silva-arc-16s-id95	|| 95  || 3193  || SILVA SSU Ref NR v.119 || 18797
+|-
+| silva-euk-18s-id95    || 95  || 7348  || SILVA SSU Ref NR v.119 || 51553
+|-
+| silva-bac-23s-id98    || 98  || 4488  || SILVA LSU Ref v.119    || 43822
+|-
+| silva-arc-23s-id98    || 98  || 251   || SILVA LSU Ref v.119 || 629
+|-
+| silva-euk-28s-id98    || 98  || 4935  || SILVA LSU Ref v.119 || 13095
+|-
+| rfam-5s-id98	98      || 98  || 59513 || RFAM || 116760
+|-
+| rfam-5.8s-id98	|| 98  || 13034 || RFAM ||225185
+|}
+
+HMMER 3.1b1 and SumaClust v1.0.00 were used to reduce the size of the original databases to the similarity listed in column 2 (%id) of the table above (see /sortmerna/rRNA databases/README.txt for a list of complete steps).
+
+These representative databases were specically made for fast ltering of rRNA. Approximately the same number of rRNA will be ltered using silva-bac-16s-id90 (12802 rRNA) as using Greengenes 97% (99322 rRNA), but the former will run signicantly faster.
+
+id %: members of the cluster must have identity at least this % id with the representative sequence.
+
+Remark: The user must first index the fasta database by using the command indexdb and then filter/map reads against the database using the command sortmerna. 
+
+== Usage ==
+
+Note that unlike the previous releases, Sortmerna 4 has a single executable <code>sortmerna</code>. There is no more a separate <code>indexdb</code> command. The user still have a control over the indexing using the <code>sortmerna</code> indexing options.
+
+List the version
+  sortmerna --version
+
+List the help:
+  sortmerna -h
