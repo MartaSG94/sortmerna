@@ -41,6 +41,67 @@ Remark: The user must first index the fasta database by using the command index
 
 Note that unlike the previous releases, Sortmerna 4 has a single executable <code>sortmerna</code>. There is no more a separate <code>indexdb</code> command. The user still have a control over the indexing using the <code>sortmerna</code> indexing options.
 
+==Options==
+{|
+| Option || argument || description || default
+|-
+| -ref || PATH || Reference file (FASTA) absolute or relative path.<br/> Use mutliple times, once per a reference file
+|-
+| -reads || PATH || Raw reads file (FASTA/FASTQ/FASTA.GZ/FASTQ.GZ).<br/>Use twice for files with paired reads
+|-
+| [ -workdir ] || PATH || Working directory for storing the Reference index, Key-value database, Output || USRDIR/sortmerna/run/
+|-
+| [ -fastx ] || Boolean || Output aligned reads into FASTA/FASTQ file
+|-
+| [ -SQ ] || Boolean || Add SQ tags to the SAM file ||
+|-
+| [ -blast ] || String
+|  output alignments in various Blast-like formats
+    '0'                    - pairwise
+    '1'                    - tabular(Blast - m 8 format)
+    '1 cigar'              - tabular + column for CIGAR
+    '1 cigar qcov'         - tabular + columns for CIGAR
+                             and query coverage
+    '1 cigar qcov qstrand' - tabular + columns for CIGAR,
+                             query coverage and strand
+|-
+| [ -other ] || Boolean || Create Non-aligned reads output file.<br/>Must be used with 'fastx' || False
+|-
+| [ -num_alignments ] || Int || Positive integer (>=0).<br/>Report first INT alignments per read reaching E-value<br/>If Int = 0, all alignments will be output ||
+|-
+| [ -best ] || || ||
+|-
+| [ -min_lis ] || || ||
+|-
+| [ -print_all_reads ] || || ||
+|-
+| [ -paired_in ] || || ||
+|-
+| [ -paired_out ] || || ||
+|-
+| [ -match ] || || ||
+|-
+| [ -mismatch ] || || ||
+|-
+| [ -gap_open ] || || ||
+|-
+| [ -gap_ext ] || || ||
+|-
+| [ -a ] || || ||
+|-
+| [ -e ] || || ||
+|-
+| [ -F ] || || ||
+|-
+| [ -N ] || || ||
+|-
+| [ -R ] || || ||
+|-
+|  [ -id ] || || ||
+|-
+| [ -coverage ] || || ||
+|}
+
 List the version
   sortmerna --version
 
