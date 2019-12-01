@@ -31,11 +31,11 @@ Figure 1. Processing pipeline
 
 HMMER 3.1b1 and SumaClust v1.0.00 were used to reduce the size of the original databases to the similarity listed in column 2 (%id) of the table above (see /sortmerna/rRNA databases/README.txt for a list of complete steps).
 
-These representative databases were specically made for fast ltering of rRNA. Approximately the same number of rRNA will be ltered using silva-bac-16s-id90 (12802 rRNA) as using Greengenes 97% (99322 rRNA), but the former will run signicantly faster.
+These representative databases were specifically made for fast fltering of rRNA. Approximately the same number of rRNA will be fltered using silva-bac-16s-id90 (12802 rRNA) as using Greengenes 97% (99322 rRNA), but the former will run signifcantly faster.
 
 id %: members of the cluster must have identity at least this % id with the representative sequence.
 
-Remark: The user must first index the fasta database by using the command indexdb and then filter/map reads against the database using the command sortmerna. 
+Remark: The user must first index the fasta database by using the command indexdb and then filter/map reads against the database using the command sortmerna. 
 
 =Usage=
 
@@ -65,7 +65,7 @@ Note that unlike the previous releases, Sortmerna 4 has a single executable <cod
     '1 cigar qcov qstrand' - tabular + columns for CIGAR,
                              query coverage and strand
 |-
-| [ -other ] || Boolean || Create Non-aligned reads output file.<br/>Must be used with 'fastx' || False
+| [ -other ] || Boolean || Create Non-aligned reads output file.<br/>Must be used with <code>fastx</code> || False
 |-
 | [ -num_alignments ] || Int || Positive integer (>=0).<br/>Report first INT alignments per read reaching E-value<br/>If Int = 0, all alignments will be output ||
 |-
@@ -110,19 +110,19 @@ List the help:
 
 ==Choosing parameters for filtering and read mapping==
 
-In SortMeRNA users have the option to output sequence alignments for their matching rRNA reads in the SAM or BLAST-like formats. Depending on the desired quality of alignments, different parameters must be set. Table 1 presents a guide to setting parameters for most use cases. In all cases, output alignments are always guaranteed to reach the threshold E-value score (default E-value=1). An E-value of 1 signifies that one random alignment is expected for aligning all reads against the reference database. The E-value in SortMeRNA is computed for the entire search space, not per read. 
+Users have the option to output sequence alignments for their matching rRNA reads in the SAM or BLAST-like formats. Depending on the desired quality of alignments, different parameters must be set. Table 1 presents a guide to setting parameters for most use cases. In all cases, output alignments are always guaranteed to reach the threshold E-value score (default E-value=1). An E-value of 1 signifies that one random alignment is expected for aligning all reads against the reference database. The E-value is computed for the entire search space, not per read. 
 
 {| class="wikitable"
 | Option                     || Speed  || Description
 |-
 | rowspan="3" | --num-alignments INT
 | Very fast for INT = 1 
-| Output the first alignment passing E-value threshold (best choice if only filtering is needed)
+| Output the first alignment passing E-value threshold (best choice if only filtering is needed)
 |-
-| Speed decreases for higher value INT || Higher INT signifies more alignments will be made & output
+| Speed decreases for higher value INT || Higher INT signifies more alignments will be made & output
 |-
 | Very slow for INT = 0
-| All alignments reaching the E-value threshold are reported (this option is not suggested for high similarity rRNA databases, due to many possible alignments per read causing a very large file output)
+| All alignments reaching the E-value threshold are reported (this option is not suggested for high similarity rRNA databases, due to many possible alignments per read causing a very large file output)
 |-
 | rowspan="3"| --best INT
 | Fast for INT = 1
@@ -135,7 +135,7 @@ In SortMeRNA users have the option to output sequence alignments for their match
 | All high-candidate reference sequences will be searched for alignments, though only the best one will be reported
 |}
 
-Table 1: SortMeRNA alignment parameter guide
+Table 1: Alignment parameter guide
 
 ===Example: multiple databases and the fastest alignment option===
   sortmerna -ref $SMR_HOME/data/silva-bac-16s-database-id85.fasta \
@@ -145,54 +145,63 @@ Table 1: SortMeRNA alignment parameter guide
 
 ===Filtering paired-end reads===
 
-If two reads files are provided ( using '-reads' twice) as input to Sortmerna e.g.
+The reads files are considered <code>paired</code> if two reads files are provided ( using '-reads' twice) as input to Sortmerna e.g.
   sortmerna -ref Ref_1 -reads File_1 -reads Rile_2 ...
-the reads files are considered Paired.
 
-The following situations are possible for paired reads:
-# A_0: Neither of the two paired reads is aligned
-# A_1: Only a single out of two paired reads is aligned (i.e. alignment score is above the given threshold)
-# A_2: Both paired reads are aligned
+The following alignment situations are possible for paired reads:
+{|
+| A_0 || Neither of the two paired reads is aligned || No output is generated
+|-
+| A_1 || A single out of a pair of reads is aligned (alignment score is above the given threshold) || see Table 3
+|-
+| A_2 || Both paired reads are aligned || both paired reads written into the <code>aligned.fasta</code> file
+|-
+|}
 
-A_0 and A_2 are straightforward: A_0 never generates any output, and A_2 always writes the pairs into 'aligned.fasta' file.
+Table 2
 
-Output generated in A_1 case can be controlled using the following options:
+In the A_1 case the output can be controlled using the following options:
 
 * fastx
 * other
-* paired_in
-* paired_out
+* paired_in - put both reads into the 'aligned.fasta' file
+* paired_out - put both reads into the 'other.fasta' file
+
+The table 3 shows the output generated depending on selected options.
 
 {|
-| fastx || other || paired_in || paired_out || Num entries written into aligned.fasta per pair || other.fasta
+|  case # || colspan="4" | options selected || colspan="2" | Number of reads per pair written into output file
 |-
-|   true   || false || false || false || 1 || 0
+| - || fastx || other || paired_in || paired_out || aligned.fasta || other.fasta
 |-
-|   true   || false || true || false || 2 || 0
+|  1 || true   || false || false || false || 1 || 0
 |-
-|   true   || false || 0 || 1 || 0 || 0
+|  2 || true   || false || true || false || 2 || 0
 |-
-|   true   || true || 1 || 0 || 2 || 0
+|  3 ||  true   || false || false || true || 0 || 0
 |-
-|   true   || true || 0 || 1 || 0 || 2
+|  4 || true   || true || true || false || 2 || 0
+|-
+|  5 || true   || true || false || true || 0 || 2
 |}
-When writing aligned and non-aligned reads to FASTA/Q files, sometimes the situation arises where one of the paired-end reads aligns and the other one doesn't. Since SortMeRNA looks at each read individually, by default the reads will be split into two separate files. That is, the read that aligned will go into the 'aligned.fasta' and the pair that didn't align will go into the 'other.fasta'.
 
-This situation would result in the splitting of some paired reads in the output files and not optimal for users who require paired order of the reads for downstream analyses.
-For users who wish to keep the order of their paired-ended reads, two options are available. If one read aligns and the other one not then,
+Table 3
 
-    (1) --paired_in will put both reads into the 'aligned.fasta' file
-    (2) --paired_out will put both reads into the 'other.fasta' file
+Case 1 results in the splitting of some paired reads in the output files and not optimal for users who require paired order of the reads for downstream analyses.
 
-The first option, --paired_in is optimal for users who want all reads in the --other file to be non-rRNA. However, there are small chances that reads which are non-rRNA will also be put into the --aligned file.
+The option 'paired_in' is optimal for users who want all reads in the <code>other.fasta</code> file to be non-rRNA. However, there are small chances that reads which are non-rRNA will also be put into the <code>aligned.fasta</code> file.
 
-The second option, --paired_out is optimal for users that want only rRNA reads in the --aligned file. However, there are small chances that reads which are rRNA will also be put into the --other file.
+The option 'paired_out' is optimal for users who want only rRNA reads in the <code>aligned.fasta</code> file. However, there are small chances that reads which are rRNA will also be put into the 'other.fasta' file.
 
-If neither of these two options is added to the sortmerna command, then aligned and non-aligned reads will be properly output to the --aligned and --other files, possibly breaking the order for a set of paired reads between two output files.
+If neither of these two options is used, then aligned and non-aligned reads will be properly output to the <code>aligned.fasta</code> and <code>other.fasta</code> files, possibly breaking the order for a set of paired reads between two output files.
 
-It's important to note that regardless of the options used, the --log file will always report the true number of reads classied as rRNA (not the number of reads in the --aligned file). 
+It's important to note that regardless of the options used, the <code>aligned.log</code> file will always report the true number of reads classified as rRNA (not the number of reads in the <code>aligned.fasta</code> file). 
 
 ===Mapping reads for classification===
+
+Although SortMeRNA is very sensitive with the small rRNA databases distributed with the source code, these databases are not optimal for classification since often alignments with 75-90% identity will be returned (there are only several thousand rRNA in most of the databases, compared to the original SILVA or Greengenes databases containing millions of rRNA). Classification at the species level generally considers alignments at 97% and above, so it is suggested to use a larger database is species classification is the main goal.
+
+Moreover, SortMeRNA is a local alignment tool, so it's also important to look at the query coverage % for each alignment. In the SAM output format, neither % id or query coverage are reported. If the user wishes for these values, then the Blast tabular format with CIGAR + query coverage option (--blast '1 cigar qcov') is the way to go. 
 
 ==OTU-picking==
 
@@ -200,7 +209,29 @@ SortMeRNA is implemented in QIIME's closed-reference and open-reference OTU-pick
 
 ==Advanced==
 
+  -num seeds INT
+
+The threshold number of seeds required to match in the primary seed-search filter before moving on to the secondary seed-cluster filter. More specically, the threshold number of seeds required before searching for a longest increasing subsequence (LIS) of the seeds' positions between the read and the closest matching reference sequence. By default, this is set to 2 seeds.
+
+  -passes INT,INT,INT
+
+In the primary seed-search filter, SortMeRNA moves a seed of length L (parameter of indexdb rna) across the read using three passes. If at the end of each pass a threshold number of seeds (defined by --num seeds) did not match to the reference database, SortMeRNA attempts to find more seeds by decreasing the interval at which the seed is placed along the read by using another pass. In default mode, these intervals are set to L,L/2,3 for Pass 1, 2 and 3, respectively. Usually, if the read is highly similar to the reference database, a threshold number of seeds will be found in the first pass.
+
+  -edges INT(%)
+
+The number (or percentage if followed by %) of nucleotides to add to each edge of the alignment region on the reference sequence before performing Smith-Waterman alignment. By default, this is set to 4 nucleotides.
+
+  -full_search FLAG
+
+During the index traversal, if a seed match is found with 0-errors, SortMeRNA will stop searching for further 1-error matches. This heuristic is based upon the assumption that 0-error matches are more signicant than 1-error matches. By turning it off using the --full_search flag, the sensitivity may increase (often by less than 1%) but with up to four-fold decrease in speed.
+
+  -pid FLAG
+
+The pid of the running sortmerna process will be added to the output files in order to avoid over-writing output if the same --aligned STRING base name is provided for different runs. 
+
 =Help=
+
+Any issues or bug reports should be reported to https://github.com/biocore/sortmerna/issues. Comments and suggestions are also always appreciated! 
 
 =Citation=
 
