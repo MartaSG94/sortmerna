@@ -4,9 +4,9 @@ November 2019, version 4.0.0
 
 SortMeRNA is a local sequence alignment tool for filtering, mapping and OTU clustering. The core algorithm is based on approximate seeds and allows for fast and sensitive analyses of NGS reads. The main application of SortMeRNA is filtering rRNA from metatranscriptomic data. Additional applications include OTU-picking and taxonomy assignation available through QIIME v1.9+ (http://qiime.org). SortMeRNA takes as input one or two (paired) reads file(s) (fasta/fasta.gz/fastq/fastq.gz), and one or multiple rRNA database file(s), and sorts apart aligned and rejected reads into two files. SortMeRNA works with Illumina, 454, Ion Torrent and PacBio data, and can produce SAM and BLAST-like alignments.
 
-[[https://github.com/biocore/sortmerna/blob/issue_136_paired_reads/docs/web/img/smr_1_arch.svg | Architecture]] 
+[[https://github.com/biocore/sortmerna/blob/issue_136_paired_reads/docs/web/img/smr_3_processing_pipeline.svg | Processing pipeline]] 
  
-Figure 1. High view architecture
+Figure 1. Processing pipeline
 
 =Databases=
 {|
@@ -138,9 +138,59 @@ In SortMeRNA users have the option to output sequence alignments for their match
 Table 1: SortMeRNA alignment parameter guide
 
 ===Example: multiple databases and the fastest alignment option===
-  --sam --fastx --blast 1 --num_alignments 1 -v
+  sortmerna -ref $SMR_HOME/data/silva-bac-16s-database-id85.fasta \
+  -ref $SMR_HOME/data/silva-arc-16s-database-id95.fasta \
+  -reads $SMR_HOME/data/set2_environmental_study_550_amplicon.fasta \
+  -sam -fastx -blast 1 -num_alignments 1 -v
 
 ===Filtering paired-end reads===
+
+If two reads files are provided ( using '-reads' twice) as input to Sortmerna e.g.
+  sortmerna -ref Ref_1 -reads File_1 -reads Rile_2 ...
+the reads files are considered Paired.
+
+The following situations are possible for paired reads:
+# A_0: Neither of the two paired reads is aligned
+# A_1: Only a single out of two paired reads is aligned (i.e. alignment score is above the given threshold)
+# A_2: Both paired reads are aligned
+
+A_0 and A_2 are straightforward: A_0 never generates any output, and A_2 always writes the pairs into 'aligned.fasta' file.
+
+Output generated in A_1 case can be controlled using the following options:
+
+* fastx
+* other
+* paired_in
+* paired_out
+
+{|
+| fastx || other || paired_in || paired_out || Num entries written into aligned.fasta per pair || other.fasta
+|-
+|   true   || false || false || false || 1 || 0
+|-
+|   true   || false || true || false || 2 || 0
+|-
+|   true   || false || 0 || 1 || 0 || 0
+|-
+|   true   || true || 1 || 0 || 2 || 0
+|-
+|   true   || true || 0 || 1 || 0 || 2
+|}
+When writing aligned and non-aligned reads to FASTA/Q files, sometimes the situation arises where one of the paired-end reads aligns and the other one doesn't. Since SortMeRNA looks at each read individually, by default the reads will be split into two separate files. That is, the read that aligned will go into the 'aligned.fasta' and the pair that didn't align will go into the 'other.fasta'.
+
+This situation would result in the splitting of some paired reads in the output files and not optimal for users who require paired order of the reads for downstream analyses.
+For users who wish to keep the order of their paired-ended reads, two options are available. If one read aligns and the other one not then,
+
+    (1) --paired_in will put both reads into the 'aligned.fasta' file
+    (2) --paired_out will put both reads into the 'other.fasta' file
+
+The first option, --paired_in is optimal for users who want all reads in the --other file to be non-rRNA. However, there are small chances that reads which are non-rRNA will also be put into the --aligned file.
+
+The second option, --paired_out is optimal for users that want only rRNA reads in the --aligned file. However, there are small chances that reads which are rRNA will also be put into the --other file.
+
+If neither of these two options is added to the sortmerna command, then aligned and non-aligned reads will be properly output to the --aligned and --other files, possibly breaking the order for a set of paired reads between two output files.
+
+It's important to note that regardless of the options used, the --log file will always report the true number of reads classied as rRNA (not the number of reads in the --aligned file). 
 
 ===Mapping reads for classification===
 
