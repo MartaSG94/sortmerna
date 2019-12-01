@@ -2,7 +2,7 @@ November 2019, version 4.0.0
 
 =Introduction=
 
-SortMeRNA is a local sequence alignment tool for filtering, mapping and OTU clustering. The core algorithm is based on approximate seeds and allows for fast and sensitive analyses of NGS reads. The main application of SortMeRNA is filtering rRNA from metatranscriptomic data. Additional applications include OTU-picking and taxonomy assignation available through QIIME v1.9+ (http://qiime.org). SortMeRNA takes as input one or two (paired) reads file(s) (fasta/fasta.gz/fastq/fastq.gz), and one or multiple rRNA database file(s), and sorts apart aligned and rejected reads into two files. SortMeRNA works with Illumina, 454, Ion Torrent and PacBio data, and can produce SAM and BLAST-like alignments.
+SortMeRNA is a local sequence alignment tool for filtering, mapping and OTU clustering. The core algorithm is based on approximate seeds and allows for fast and sensitive analyses of NGS reads. The main application of SortMeRNA is filtering rRNA from metatranscriptomic data. Additional applications include OTU-picking and taxonomy assignation available through QIIME v1.9+ http://qiime.org. SortMeRNA takes as input one or two (paired) reads file(s) (fasta/fasta.gz/fastq/fastq.gz), and one or multiple rRNA database file(s), and sorts apart aligned and rejected reads into two files. SortMeRNA works with Illumina, 454, Ion Torrent and PacBio data, and can produce SAM and BLAST-like alignments.
 
 [[https://github.com/biocore/sortmerna/blob/master/docs/img/smr_3_processing_pipeline.svg | Processing pipeline]] 
 
@@ -39,7 +39,20 @@ Remark: The user must first index the fasta database by using the command indexd
 
 =Usage=
 
-Note that unlike the previous releases, Sortmerna 4 has a single executable <code>sortmerna</code>. There is no more a separate <code>indexdb</code> command. The user still have a control over the indexing using the <code>sortmerna</code> indexing options.
+Highlights
+* 4.0 has a single executable <code>sortmerna</code> (no more <code>indexdb</code>)
+* The user still have a control over the indexing using the <code>sortmerna</code> indexing options.
+* The only required options are <code>-ref</code> and <code>-reads</code>
+* Multiple <code>-ref</code> accepted
+* Two <code>-reads</code> options accepted for Paired reads files
+* Options (any) can be specified using a double or single dash e.g. <code>-ref</code>/<code>--ref</code> and <code>-reads</code>/<code>--reads</code>
+* Both plain <code>fasta/fastq</code> and archived <code>fasta.gz/fastq.gz</code> files are accepted
+* Relative paths are accepted
+* Working directory. 
+** Sortmerna uses a <code>Working directory</code> to store
+*** Reference Index Database
+*** Key-Value Database for alignment results
+*** Output
 
 ==Options==
 {|
@@ -145,8 +158,8 @@ Table 1: Alignment parameter guide
 
 ===Filtering paired-end reads===
 
-The reads files are considered <code>paired</code> if two reads files are provided ( using '-reads' twice) as input to Sortmerna e.g.
-  sortmerna -ref Ref_1 -reads File_1 -reads Rile_2 ...
+The reads files are considered <code>paired</code> if two reads files are provided ( using <code>-reads</code> twice) e.g.
+  sortmerna -ref Ref_1 -reads File_1 -reads File_2 ...
 
 The following alignment situations are possible for paired reads:
 {|
@@ -157,8 +170,7 @@ The following alignment situations are possible for paired reads:
 | A_2 || Both paired reads are aligned || both paired reads written into the <code>aligned.fasta</code> file
 |-
 |}
-
-Table 2
+  Table 2
 
 In the A_1 case the output can be controlled using the following options:
 
