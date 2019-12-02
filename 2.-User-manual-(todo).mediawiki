@@ -47,8 +47,8 @@ Highlights
 * Options (any) can be specified using a double or single dash e.g. <code>-ref</code>/<code>--ref</code> and <code>-reads</code>/<code>--reads</code>
 * Both plain <code>fasta/fastq</code> and archived <code>fasta.gz/fastq.gz</code> files are accepted
 * Relative paths are accepted
-* Working directory. 
-** Sortmerna uses a <code>Working directory</code> to store
+* Work directory. 
+** Sortmerna uses a <code>Work directory</code> to store
 *** Reference Index Database
 *** Key-Value Database for alignment results
 *** Output
