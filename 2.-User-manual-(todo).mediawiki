@@ -40,7 +40,7 @@ Remark: The user must first index the fasta database by using the command indexd
 =Usage=
 
 Highlights
-* 4.0 has a single executable <code>sortmerna</code> (no more <code>indexdb</code>). The user still have a control over the indexing using the <code>sortmerna</code> indexing options.
+* 4.0 has a single executable <code>sortmerna</code> (no more <code>indexdb</code>). Indexing is controlled using the <code>sortmerna</code> indexing options.
 * The only required options are <code>-ref</code> and <code>-reads</code>
 * Multiple <code>-ref</code> accepted
 * Two <code>-reads</code> options accepted for Paired reads files
