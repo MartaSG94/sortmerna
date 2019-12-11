@@ -53,6 +53,27 @@ Highlights
 *** Key-Value Database for alignment results
 *** Output
 
+==Overview==
+
+===Work directory===
+Sortmerna uses a Work directory with the default location <code>$USER/sortmerna/run/</code>.
+The work directory has the following structure
+    $USER/sortmerna/run/
+        kvdb/       key-value datastore for alignment results
+        idx/        index database
+        out/        output files like aligned.blast
+
+On each new run sortmerna checks the <code>idx</code> directory for already existing index files. If index files exist, the indexing won't be repeated, and the execution trace will show:
+    [Index:104] Found 32 non-empty index files. Skipping indexing.
+
+If for whatever reason you like to run the indexing from scratch, just purge the <code>idx</code>
+    rm -rf $HOME/sortmerna/run/idx/
+
+Sortmerna also checks <code>kvdb</code> directory. This directory has to be Empty prior each new run. Unlike the index database, the alignment results are not reused, unless only report generation task is performed using the <code>-task</code> option i.e. <code>-task 1</code> or <code>-task 2</code>.
+
+Purge <code>kvdb</code> directory prior each new run:
+    rm -rf $HOME/sortmerna/run/kvdb/
+
 ==Options==
 {|
 | Option || argument || description || default
