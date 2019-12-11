@@ -74,6 +74,10 @@ Sortmerna also checks <code>kvdb</code> directory. This directory has to be Empt
 Purge <code>kvdb</code> directory prior each new run:
     rm -rf $HOME/sortmerna/run/kvdb/
 
+For reference, [https://github.com/biocore/sortmerna/wiki/Sample-execution-trace a sample trace of a successful execution ] is provided.
+The trace is from a standard Sortmerna test found in the distribution. The test command can be viewed [https://github.com/biocore/sortmerna/blob/master/scripts/test.jinja.yaml#L347 here]
+
+
 ==Options==
 {|
 | Option || argument || description || default
