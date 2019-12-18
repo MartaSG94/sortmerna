@@ -13,15 +13,15 @@ Perform the installation as follows
 # download the installer into a directory of your choice (substitute the release version as desired)
 pwd
   /home/biocodz
-wget https://github.com/biocore/sortmerna/releases/download/v4.0.0/sortmerna-4.0.0-linux.sh
+wget https://github.com/biocore/sortmerna/releases/download/v4.0.0/sortmerna-4.0.0-Linux.sh
 
 ls -lrt
   ...
-  sortmerna-4.0.0-linux.sh
+  sortmerna-4.0.0-Linux.sh
 
 # view help
-bash sortmerna-4.0.0-linux.sh --help
+bash sortmerna-4.0.0-Linux.sh --help
 
 # run the installation
-bash sortmerna-4.0.0-linux.sh --skip-license
+bash sortmerna-4.0.0-Linux.sh --skip-license
 ```
