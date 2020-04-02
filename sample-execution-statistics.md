@@ -9,7 +9,7 @@ Statistics calculation on 2 reads files of ~50M reads each
 Run statistics:
   - 8 databases, 
   - 2 reads files of ~100M reads total
-  - 8 threads
+  - 8 threads (a high-end laptop as of 202001)
 <pre>
 num reads: 100,415,918
 
