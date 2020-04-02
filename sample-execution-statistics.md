@@ -8,7 +8,7 @@ Statistics calculation on 2 reads files of ~50M reads each
 
 Run statistics:
   - 8 databases, 
-  - 2 reads files of ~100 reads total
+  - 2 reads files of ~100M reads total
   - 8 threads
 <pre>
 num reads: 100,415,918
